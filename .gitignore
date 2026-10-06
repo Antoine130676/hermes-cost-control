@@ -11,3 +11,4 @@ telegram_alerts.txt
 alerts.log
 enforcement.log
 router.log
+examples/policy-assistant/audit.jsonl

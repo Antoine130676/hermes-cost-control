@@ -1,0 +1,18 @@
+{
+  "note": "Held-out evaluation set. These questions were written before the retrieval rules were tuned against golden.json and are not used for tuning. If you tune against them they stop being held-out; add fresh ones instead.",
+  "questions": [
+    {"question": "What is the maximum hotel price per night in a big city?", "expected": "expenses.md > Travel"},
+    {"question": "Is alcohol covered when I take a customer out for dinner?", "expected": "expenses.md > Meals and client entertainment"},
+    {"question": "Who do I notify if my company card is stolen?", "expected": "expenses.md > Corporate cards"},
+    {"question": "Can I take unpaid time off for a few weeks?", "expected": "leave.md > Unpaid leave"},
+    {"question": "What should I do if a family member dies?", "expected": "leave.md > Bereavement"},
+    {"question": "Where can I find the list of approved AI tools?", "expected": "data-handling.md > Using AI tools"},
+    {"question": "How do I check a new supplier's bank account details?", "expected": "procurement.md > Supplier onboarding"},
+    {"question": "Who can sign a contract worth 30,000 euros?", "expected": "procurement.md > Contracts and signatures"},
+    {"question": "Do I have to use a VPN in a cafe?", "expected": "remote-work.md > Security at home"},
+    {"question": "Can I share a file with a customer by email?", "expected": "data-handling.md > Sharing files outside the company"},
+    {"question": "Who won the football match yesterday?", "out_of_scope": true},
+    {"question": "How do I get a mortgage?", "out_of_scope": true},
+    {"question": "What is the weather tomorrow?", "out_of_scope": true}
+  ]
+}

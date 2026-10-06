@@ -35,6 +35,7 @@ Local RAG -------- ChromaDB + local embeddings --> Ollama answers lookups, no cl
 | [`monitor/`](monitor/) | Watches the agent log for provider switches, blocks unapproved ones, alerts near a threshold |
 | [`rag/`](rag/) | Builds a local Chroma index of project notes and agent skills, and answers questions from it with a local model |
 | [`tests/`](tests/) | 13 tests for routing, cost estimates and path safety; run on Linux and Windows in CI |
+| [`examples/policy-assistant/`](examples/policy-assistant/) | A small policy assistant for an HR or Finance team: cited answers, refusals, privacy redaction, an audit log, an evaluation set and a handover guide |
 
 ## What is measured so far
 
@@ -68,6 +69,12 @@ The local lookup could not find client audit reports, because the indexer only r
 | Answer | "The context does not contain this information" | Lists the missing security headers (HSTS, X-Frame-Options, Content-Security-Policy) |
 
 Honest limits: the answer was incomplete (it missed two of the headers), drew part of its text from a different report, and each local answer takes about two minutes on my current hardware. It suits lookups, not precise reporting.
+
+## Example: a policy assistant for a business team
+
+[`examples/policy-assistant/`](examples/policy-assistant/) shows the same ideas applied to a team that is not technical. Employees ask about HR or Finance policies; the assistant answers from the policies with the section named, says so when it is unsure, and refuses when nothing matches. Personal data is redacted from questions, the audit log never stores the question, and everything runs locally with no dependencies.
+
+It has two evaluation sets, one used for tuning and one held out. On the held-out set the right section was ranked first for 100% of answerable questions, no out-of-scope question got a confident answer, and one answerable question was refused. The policies and questions are synthetic and the sets are small, so treat the figures as a demonstration of the method, not a benchmark; the README there lists the limits. A plain-language [handover guide](examples/policy-assistant/HANDOVER.md) covers how a team updates it, checks it and routes the privacy decisions before a rollout.
 
 ## Bugs the tests found
 
