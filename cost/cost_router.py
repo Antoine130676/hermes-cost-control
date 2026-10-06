@@ -8,7 +8,7 @@ import os
 import sys
 import re
 
-# Cost hierarchy (per 1M tokens)
+# Cost hierarchy (per 1M input tokens). Claude rates checked 6 Oct 2026 against Anthropic's pricing page.
 COST_PER_M = {
     'ollama': 0.00,           # FREE
     'qwen2.5:14b': 0.00,      # FREE (local)
@@ -16,9 +16,9 @@ COST_PER_M = {
     'mistral-nemo:12b': 0.00, # FREE (local)
     'kimi-k2-thinking': 0.15, # CHEAP
     'kimi-k3': 0.15,          # CHEAP
-    'claude-haiku': 0.50,     # EXPENSIVE
-    'claude-sonnet': 3.00,    # VERY EXPENSIVE
-    'claude-opus': 15.00,     # PROHIBITIVE
+    'claude-haiku': 1.00,     # EXPENSIVE (Haiku 4.5 input price)
+    'claude-sonnet': 2.00,    # VERY EXPENSIVE (Sonnet 5 input price)
+    'claude-opus': 4.00,      # PROHIBITIVE (Opus 5.5 input price)
     'gpt-4': 10.00,           # EXPENSIVE
     'gemini-pro': 0.50,       # EXPENSIVE
 }

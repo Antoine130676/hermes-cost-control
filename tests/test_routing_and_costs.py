@@ -66,7 +66,7 @@ class CostTrackerTests(unittest.TestCase):
         self.assertEqual(self.t.estimate_cost("qwen2.5:14b", 1_000_000, 1_000_000)["total"], 0)
 
     def test_premium_pricing_per_million_tokens(self):
-        self.assertAlmostEqual(self.t.estimate_cost("claude-sonnet", 1_000_000, 1_000_000)["total"], 18.0)
+        self.assertAlmostEqual(self.t.estimate_cost("claude-sonnet", 1_000_000, 1_000_000)["total"], 12.0)
 
     def test_provider_prefix_and_suffix_are_normalised(self):
         got = self.t.estimate_cost("moonshotai/kimi-k2-thinking", 1_000_000, 1_000_000)

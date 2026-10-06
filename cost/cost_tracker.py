@@ -12,15 +12,17 @@ from pathlib import Path
 COST_DB = Path(os.environ.get('HERMES_PROJECTS_DIR', Path.home() / 'hermes-projects')) / 'cost-optimizer' / 'cost_tracker.json'
 COST_DB.parent.mkdir(parents=True, exist_ok=True)
 
-# Pricing (per 1M tokens)
+# Pricing (per 1M tokens). Claude rates: platform.claude.com/docs/en/about-claude/pricing, checked 6 Oct 2026.
+# Kimi entries are UNVERIFIED list prices; the observed blended rate on Nous is in the README.
+# Cache-read pricing is not modelled here (see README).
 PRICING = {
     'ollama': {'input': 0, 'output': 0, 'name': 'Ollama (Local)'},
     'qwen2.5:14b': {'input': 0, 'output': 0, 'name': 'Qwen 2.5 14B (Local)'},
     'kimi-k2': {'input': 0.15, 'output': 0.60, 'name': 'Kimi K2 (Nous)'},
     'kimi-k3': {'input': 0.15, 'output': 0.60, 'name': 'Kimi K3 (Nous)'},
-    'claude-haiku': {'input': 0.25, 'output': 1.25, 'name': 'Claude Haiku'},
-    'claude-sonnet': {'input': 3.00, 'output': 15.00, 'name': 'Claude Sonnet'},
-    'claude-opus': {'input': 15.00, 'output': 75.00, 'name': 'Claude Opus'},
+    'claude-haiku': {'input': 1.00, 'output': 5.00, 'name': 'Claude Haiku 4.5'},
+    'claude-sonnet': {'input': 2.00, 'output': 10.00, 'name': 'Claude Sonnet 5'},
+    'claude-opus': {'input': 4.00, 'output': 20.00, 'name': 'Claude Opus 5.5'},
 }
 
 class CostTracker:

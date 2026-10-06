@@ -6,7 +6,7 @@ Guardrails for running AI agents without surprise bills: a provider lock and mon
 
 Built around Hermes Agent (by Nous Research) with Ollama as the local model runner. This repo contains my own scripts only; it does not include Hermes, Ollama or OmniRoute.
 
-> **Status: working tools, results not yet declared.** The routing and the guardrails are built and tested. The cost saving they are meant to deliver is a projection, and I will publish a measured number after a full week on the new routing. Nothing below claims a percentage saved.
+> **Status: working tools; routing savings not yet declared.** The routing and the guardrails are built and tested. The per-token price comparison below is measured and calculated from real usage. The saving the router delivers is a projection until I have a clean week of data. Nothing here claims a percentage saved by routing.
 
 ## Why I built it
 
@@ -35,6 +35,32 @@ Local RAG -------- ChromaDB + local embeddings --> Ollama answers lookups, no cl
 | [`monitor/`](monitor/) | Watches the agent log for provider switches, blocks unapproved ones, alerts near a threshold |
 | [`rag/`](rag/) | Builds a local Chroma index of project notes and agent skills, and answers questions from it with a local model |
 | [`tests/`](tests/) | 13 tests for routing, cost estimates and path safety; run on Linux and Windows in CI |
+
+## What is measured so far
+
+All figures are from my own usage. **Measured** means read from a provider page; **calculated** means derived from measured tokens and published prices.
+
+**Nous Portal, last 30 days (usage page, read 6 Oct 2026), Kimi K2 Thinking:**
+
+| | |
+|---|---|
+| Spend | $31.47 (measured) |
+| Tokens | 93.7M: 10.7M uncached input, 0.6M output, 82.4M cache reads, no cache writes (measured) |
+| Blended rate | about **$0.34 per million tokens**; 88% of tokens are cache reads (calculated) |
+
+**Same tokens, priced at Anthropic's published rates** (Sonnet 5: $2 in, $10 out, $0.20 cache read), calculated:
+
+| Model | Cost for the same 93.7M tokens | Per million |
+|---|---|---|
+| Kimi K2 Thinking on Nous | $31.47 (measured) | $0.34 |
+| Claude Sonnet 5 | $43.84 | $0.47 |
+
+Kimi K2 Thinking is about **28% cheaper per token than Sonnet 5** on this token mix. The comparison treats the two as comparable reasoning models. Quality was not benchmarked here, and Claude cache writes are ignored, which makes the Sonnet figure slightly low.
+
+**What is not declared yet**
+- The saving from the router and guardrails. Spend dropped sharply after the routing began (the Nous chart shows about $27 of the $31.47 on 30 Sep and 1 Oct, the day of the provider-switch incident, then under $1 a day from 3 Oct), but the account balance was also nearly exhausted, so the drop cannot be credited to routing.
+- The Anthropic side. I have not yet read the usage by model from the Anthropic console.
+- A full normal week with credits available. That is the measurement I will publish.
 
 ## The RAG part: a real before and after
 
@@ -77,7 +103,7 @@ Everything runs locally. Indexes and logs are git-ignored, because they can cont
 ## Known limitations
 
 - The cost router defines an "expensive" tier but does not act on it; the smart router handles the warning instead.
-- Cost figures are estimates. Provider dashboards are the authority.
+- Cost figures in the tracker are estimates and ignore cache pricing. Provider dashboards are the authority. Claude prices were checked against Anthropic's pricing page on 6 Oct 2026 and will drift.
 - OmniRoute is configured as an extra routing gateway in my setup, but this repo does not depend on it.
 - Local model answers are slow and sometimes mix sources.
 
