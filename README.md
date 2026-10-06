@@ -10,7 +10,7 @@ Built around Hermes Agent (by Nous Research) with Ollama as the local model runn
 
 ## Why I built it
 
-Over 30 days my agent spend was about **$64** (Anthropic $33.86 and Nous Portal $30.16, read from the provider dashboards on 3 Oct 2026). On 30 Sep a dropped connection made the agent **silently fail over from a cheap model to a premium one** mid-request, which cost an unexpected **$23.35**. That incident drove the design: cheap by default, premium only on purpose, and an alarm when anything switches.
+Over 30 days my agent spend was about **$65** across two providers (Anthropic $33.85 and Nous Portal $31.47, read from the provider consoles on 6 Oct 2026). On 30 Sep a dropped connection made the agent **silently switch from Kimi to Claude** in the middle of a long session. The Anthropic spend over 28 to 30 Sep was about $21, and I cannot separate how much of it the switch alone caused. That incident drove the design: cheap by default, premium only on purpose, and an alarm when anything switches.
 
 ## How it fits together
 
@@ -38,29 +38,24 @@ Local RAG -------- ChromaDB + local embeddings --> Ollama answers lookups, no cl
 
 ## What is measured so far
 
-All figures are from my own usage. **Measured** means read from a provider page; **calculated** means derived from measured tokens and published prices.
+All figures are from my own usage over the last 30 days, read from the provider consoles on 6 Oct 2026. **Measured** means read from a provider page; **calculated** or **estimated** means derived.
 
-**Nous Portal, last 30 days (usage page, read 6 Oct 2026), Kimi K2 Thinking:**
-
-| | |
-|---|---|
-| Spend | $31.47 (measured) |
-| Tokens | 93.7M: 10.7M uncached input, 0.6M output, 82.4M cache reads, no cache writes (measured) |
-| Blended rate | about **$0.34 per million tokens**; 88% of tokens are cache reads (calculated) |
-
-**Same tokens, priced at Anthropic's published rates** (Sonnet 5: $2 in, $10 out, $0.20 cache read), calculated:
-
-| Model | Cost for the same 93.7M tokens | Per million |
+| | Anthropic API (Claude) | Nous Portal (Kimi K2 Thinking) |
 |---|---|---|
-| Kimi K2 Thinking on Nous | $31.47 (measured) | $0.34 |
-| Claude Sonnet 5 | $43.84 | $0.47 |
+| Spend | $33.85 | $31.47 |
+| Tokens | 101.9M (101.3M in, 0.5M out) | 93.7M (10.7M uncached in, 0.6M out, 82.4M cache reads) |
+| Blended rate | about $0.33 per million tokens | about $0.34 per million tokens |
 
-Kimi K2 Thinking is about **28% cheaper per token than Sonnet 5** on this token mix. The comparison treats the two as comparable reasoning models. Quality was not benchmarked here, and Claude cache writes are ignored, which makes the Sonnet figure slightly low.
+Combined: about **$65 on 196M tokens**. Hermes' own token counts agree with the Anthropic console to within 3%.
+
+**Reading the per-token rates.** The Claude figure is a blend of Sonnet 5 and Haiku 4.5 (about two thirds and one third of tokens, from Hermes), and it includes cache writes, which Nous does not charge. Splitting it by that mix gives an estimated Sonnet-only rate of about $0.41 per million, so **Kimi K2 Thinking is roughly 17% cheaper per token than Sonnet 5**. Priced at Anthropic's published rates with no cache writes, the gap is 28%. I treat the true figure as somewhere between the two until the console is read grouped by model. The comparison assumes the two are comparable reasoning models; quality was not benchmarked here.
+
+**A measured result.** Anthropic spend was **$0.00 from 1 Oct to 6 Oct**, after the provider lock went in. That is by design (the lock removes the other providers' keys), so it shows the lock works, not that cost fell.
 
 **What is not declared yet**
-- The saving from the router and guardrails. Spend dropped sharply after the routing began (the Nous chart shows about $27 of the $31.47 on 30 Sep and 1 Oct, the day of the provider-switch incident, then under $1 a day from 3 Oct), but the account balance was also nearly exhausted, so the drop cannot be credited to routing.
-- The Anthropic side. I have not yet read the usage by model from the Anthropic console.
-- A full normal week with credits available. That is the measurement I will publish.
+- The saving the router delivers. Nous spend was about $27 of its $31.47 on 30 Sep and 1 Oct, then under $1 a day from 3 Oct, but the Nous balance was also nearly exhausted, so the drop cannot be credited to routing.
+- The cost of the incident itself. The Anthropic console shows about $21 across 28 to 30 Sep, which covers the whole long session in which the switch happened, so the part caused by the switch alone is not separable.
+- Usage grouped by model on the Anthropic side, and a full normal week with credits available. That is the measurement I will publish.
 
 ## The RAG part: a real before and after
 
@@ -109,7 +104,7 @@ Everything runs locally. Indexes and logs are git-ignored, because they can cont
 
 ## Next
 
-1. Publish the measured weekly spend against the $64 baseline, once a full week is in.
+1. Publish the measured weekly spend against the $65 baseline, once a full week with credits is in, and read the Anthropic console grouped by model.
 2. Keep retrieval inside one client's notes when the question names that client.
 3. Wire the expensive tier into the cost router.
 
