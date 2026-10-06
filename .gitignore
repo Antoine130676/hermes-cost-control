@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.env
+# private data: never commit indexes, logs or trackers
+rag-index/
+*.log
+*.pid
+credit_tracker.json
+cost_tracker.json
+telegram_alerts.txt
+alerts.log
+enforcement.log
+router.log
